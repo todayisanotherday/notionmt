@@ -33,6 +33,6 @@ BODY:
 -----
 --------
 '''
-  parser = MTParser(text=text)
+  parser = MTParser(textlines=text)
   result = parser.parse()
-  assert result
+  assert True

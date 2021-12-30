@@ -1,13 +1,13 @@
 # coding: utf-8
 
 import logging
-
+from mtparser import MTParser
 
 class Article():
 
     def __init__(self, filename=""):
         self.filename = filename
-        self.raw_doc = []
+        self.raw_lines = []
 
     def load(self) -> list[str]:
         """ ファイル読み取り
@@ -21,21 +21,15 @@ class Article():
         if not self.filename:
             logging.warning("ファイル名がセットされていません。")
             return
-        with open(self.filename) as f:
+        with open(self.filename, 'r') as f:
             lines = f.readlines()
-        self.raw_lines = lines
+            self.raw_lines = lines
         logging.info("読み込み成功しました。")
 
 
     def parse(self):
         """ ファイルから記事ごとに解析する
         """
-        MULTILINE = '-----\n'
-        SPLITLINE = '--------\n'
-        for line in self.raw_lines:
-            if line == SPLITLINE:
-                return
-            elif line == MULTILINE:
-                print
-            else:
-                print(line)
+        logging.info("解析開始します。")
+        parser = MTParser(self.raw_lines)
+        parser.parse()

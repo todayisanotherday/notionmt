@@ -36,7 +36,7 @@ def main():
         article.parse()
     except Exception as e:
         logging.error(e)
-        logging.info('ERROR END')
+        logging.info('エラー終了')
 
     # notion出力
 
