@@ -1,32 +1,50 @@
 # coding: utf-8
 
-from enum import Enum
-import logging
+from lark import Lark, Transformer
+from functools import reduce
+import logging, pprint
 
 
-class MTMode(Enum):
-    """ 解析時の状態を定義
-    """
-    SINGLE_LINE = 'SINGLE_LINE'  # 単体行情報
-    MULTI_LINE = 'MULTI_LINE'  # 複数行情報
+
+class MTTransformer(Transformer):
+    start = list
+
+    def article(self, tokens):
+        return tokens
+        
+    def metafields(self, tokens):
+        return {'metafields' : reduce(lambda x,y: {**x, **y}, tokens)}
+    def metafield(self, tokens):
+        return { tokens[0].value : tokens[1].value }
+
+    def sectionfields(self, tokens):
+        return {'sectionfields' : tokens}
+    def sectionfield(self, tokens):
+        return tokens
 
 
 class MTParser():
     """ MTParser
-      MovableType形式のファイルを解析するクラス
-      再帰下降構文解析による実装を目指す
+        MovableType形式のファイルを解析するクラス
     """
 
-    SPLITLINE = '--------\n'  # 区切り線
-    MULTILINE = '-----\n'  # 複数行
+    GRAMMER_FILENAME = './lib/mtparser.lark'
 
-    def __init__(self, textlines: list[str] = []):
+    def __init__(self, text: str = []):
         """コンストラクタ
 
         Args
-            textlines (list[str], optional): fs.readlinesで取得した解析対象. Defaults to [].
+            textlines (str, optional): 解析対象文字列
         """
-        self.textlines = textlines
+        self.text = text
 
-    def parse(self, mode=MTMode.SINGLE_LINE):
-      pass
+    def parse(self):
+        with open(self.GRAMMER_FILENAME, 'r') as fs:
+            grammer = ''.join(fs.readlines())
+        parser = Lark(grammer,
+                    start='start',
+                    parser='lalr',
+                    transformer=MTTransformer(),
+                    )
+        result = parser.parse(self.text)
+        logging.info(pprint.pformat(result))

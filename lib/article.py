@@ -7,7 +7,7 @@ class Article():
 
     def __init__(self, filename=""):
         self.filename = filename
-        self.raw_lines = []
+        self.raw_doc = []
 
     def load(self) -> list[str]:
         """ ファイル読み取り
@@ -23,7 +23,7 @@ class Article():
             return
         with open(self.filename, 'r') as f:
             lines = f.readlines()
-            self.raw_lines = lines
+            self.raw_doc = ''.join(lines)
         logging.info("読み込み成功しました。")
 
 
@@ -31,5 +31,5 @@ class Article():
         """ ファイルから記事ごとに解析する
         """
         logging.info("解析開始します。")
-        parser = MTParser(self.raw_lines)
+        parser = MTParser(self.raw_doc)
         parser.parse()

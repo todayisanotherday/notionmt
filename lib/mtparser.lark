@@ -1,0 +1,27 @@
+// start nonterminal
+?start : article*
+
+// nonterminal
+article : (metafields sectionfields) _ARTICLE_SEPARATOR
+metafields: (metafield*) _SEPARATOR
+metafield: (META_KEY ":" VALUE) _NEWLINE 
+sectionfields : (sectionfield*) 
+sectionfield : (SECTION_KEY ":" _NEWLINE textline+) _SEPARATOR
+textline : TEXT? _NEWLINE
+
+// terminal
+META_KEY   : "AUTHOR" 
+              | "TITLE"
+              | "BASENAME"
+              | "STATUS"
+              | "ALLOW COMMENTS"
+              | "CONVERT BREAKS"
+              | "DATE"
+VALUE : /.+/
+SECTION_KEY : "BODY"
+TEXT: /.+/
+
+// ignored terminal
+_ARTICLE_SEPARATOR.2: "--------\n"
+_SEPARATOR.2: "-----\n"
+_NEWLINE : "\n"
