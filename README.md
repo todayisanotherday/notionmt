@@ -15,3 +15,6 @@ pipenv install
 ```python
 pipenv run test
 ```
+
+## Link
+- https://www.sixapart.jp/movabletype/manual/3.3/f_import_format/
