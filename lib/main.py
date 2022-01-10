@@ -33,7 +33,9 @@ def main():
     try:
         article = Article(filename=args.filename)
         article.load()
-        article.parse()
+        result = article.parse()
+        with open('./result.txt', 'w') as f:
+            f.write(result)
     except Exception as e:
         logging.error(e)
         logging.info('エラー終了')

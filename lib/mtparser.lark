@@ -6,8 +6,11 @@ article : (metafields sectionfields) _ARTICLE_SEPARATOR
 metafields: (metafield*) _SEPARATOR
 metafield: (META_KEY ":" VALUE) _NEWLINE 
 sectionfields : (sectionfield*) 
-sectionfield : (SECTION_KEY ":" _NEWLINE textline+) _SEPARATOR
-textline : TEXT? _NEWLINE
+sectionfield : (SECTION_KEY ":" _NEWLINE sectionvalue)_SEPARATOR
+sectionvalue : sectionmetafield* textlines
+sectionmetafield: (SECTION_META_KEY ":" VALUE _NEWLINE)
+textlines: textline+
+textline: TEXT? _NEWLINE
 
 // terminal
 META_KEY   : "AUTHOR" 
@@ -17,8 +20,22 @@ META_KEY   : "AUTHOR"
               | "ALLOW COMMENTS"
               | "CONVERT BREAKS"
               | "DATE"
+              | "PRIMARY CATEGORY"
+              | "CATEGORY"
 VALUE : /.+/
 SECTION_KEY : "BODY"
+            | "EXTENDED BODY"
+            | "COMMENT"
+            | "PING"
+            | "EXCERPT"
+SECTION_META_KEY.1 : "AUTHOR"
+            | "URL"
+            | "DATE"
+            | "TITLE"
+            | "IP"
+            | "BLOG NAME"
+            | "EMAIL"
+            | "AUTHOR"
 TEXT: /.+/
 
 // ignored terminal
